@@ -4,6 +4,7 @@ import { startCommand } from "./commands/start.tsx";
 import { resumeCommand } from "./commands/resume.tsx";
 import { historyCommand } from "./commands/history.tsx";
 import { exportCommand } from "./commands/export.ts";
+import { insightsCommand } from "./commands/insights.tsx";
 import {
   listCategories,
   addCategory,
@@ -48,6 +49,13 @@ program
   .option("-f, --format <format>", "Format: json, markdown", "json")
   .action(async (options) => {
     await exportCommand(options);
+  });
+
+program
+  .command("insights")
+  .description("AI-powered analysis of your time tracking data")
+  .action(async () => {
+    await insightsCommand();
   });
 
 const categories = program

@@ -31,6 +31,15 @@ List all configured categories.
 - `timectl categories remove <name>` — remove a category
 - `timectl categories migrate <from> <to>` — rewrite all stored entries from `<from>` to `<to>`, ensure `<to>` exists in config, and remove `<from>` from the category list
 
+### `timectl insights`
+Interactive AI-powered analysis of your time tracking data. Launches a TUI with:
+
+1. **Period selection** — choose "This Week" or "This Month"
+2. **Date picker** — scroll-based year/month/day selector (↑↓ to change, ←→ to switch segments)
+3. **AI analysis** — streams insights from Claude including time allocation, gap analysis, work patterns, and recommendations
+
+Requires `ANTHROPIC_API_KEY` in your environment or `.env` file. Uses Claude Sonnet 4.6 via the Vercel AI SDK.
+
 ## Storage
 
 All data is stored locally under `~/.timectl/`:
