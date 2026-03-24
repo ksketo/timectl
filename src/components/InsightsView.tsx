@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Box, Text, useApp, useInput } from "ink";
 import SelectInput from "ink-select-input";
 import Spinner from "ink-spinner";
-import { DatePicker } from "./DatePicker.tsx";
 import { getEntriesRange } from "../lib/storage.ts";
 import { startOfWeek, startOfMonth } from "../lib/format.ts";
 import { prepareInsightsData, streamInsights } from "../lib/insights.ts";
 
-type Step = "period" | "date" | "analyzing" | "done" | "error";
+type Step = "period" | "analyzing" | "done" | "error";
 type Period = "week" | "month";
 
 const PERIOD_ITEMS = [
@@ -22,40 +21,20 @@ export function InsightsView() {
   const [errorMsg, setErrorMsg] = useState("");
   const [output, setOutput] = useState("");
 
-  // Date picker state
-  const now = new Date();
-  const [year, setYear] = useState(now.getFullYear());
-  const [month, setMonth] = useState(now.getMonth() + 1);
-  const [day, setDay] = useState(now.getDate());
-
-  // Handle period selection
+  // Handle period selection → go straight to analyzing
   const handlePeriodSelect = (item: { value: Period }) => {
     setPeriod(item.value);
-    setStep("date");
+    setStep("analyzing");
   };
 
-  // Handle date confirm / back
+  // Quit handler
   useInput(
     (input, key) => {
-      if (step === "date") {
-        if (key.return) {
-          setStep("analyzing");
-          return;
-        }
-        if (key.escape) {
-          setStep("period");
-          return;
-        }
-      }
-
-      if (step === "done" || step === "error") {
-        if (key.escape || input.toLowerCase() === "q") {
-          exit();
-          return;
-        }
+      if (key.escape || input.toLowerCase() === "q") {
+        exit();
       }
     },
-    { isActive: step === "date" || step === "done" || step === "error" }
+    { isActive: step === "done" || step === "error" }
   );
 
   // Run analysis when step becomes "analyzing"
@@ -66,11 +45,11 @@ export function InsightsView() {
 
     async function run() {
       try {
-        const endDate = new Date(year, month - 1, day, 23, 59, 59, 999);
+        const now = new Date();
         const from =
-          period === "week" ? startOfWeek(endDate) : startOfMonth(endDate);
+          period === "week" ? startOfWeek(now) : startOfMonth(now);
 
-        const entries = await getEntriesRange(from, endDate);
+        const entries = await getEntriesRange(from, now);
 
         if (entries.length === 0) {
           if (!cancelled) {
@@ -80,7 +59,7 @@ export function InsightsView() {
           return;
         }
 
-        const data = prepareInsightsData(entries, from, endDate);
+        const data = prepareInsightsData(entries, from, now);
         const result = streamInsights(data);
 
         for await (const delta of (await result).textStream) {
@@ -101,7 +80,7 @@ export function InsightsView() {
     return () => {
       cancelled = true;
     };
-  }, [step, year, month, day, period]);
+  }, [step, period]);
 
   // Period selection
   if (step === "period") {
@@ -111,29 +90,6 @@ export function InsightsView() {
           AI Insights — Select period:
         </Text>
         <SelectInput items={PERIOD_ITEMS} onSelect={handlePeriodSelect} />
-      </Box>
-    );
-  }
-
-  // Date selection
-  if (step === "date") {
-    return (
-      <Box flexDirection="column" gap={1}>
-        <Text bold color="cyan">
-          Select end date:
-        </Text>
-        <DatePicker
-          year={year}
-          month={month}
-          day={day}
-          onChange={(y, m, d) => {
-            setYear(y);
-            setMonth(m);
-            setDay(d);
-          }}
-          isFocused={true}
-        />
-        <Text dimColor>Enter: Confirm  Esc: Back</Text>
       </Box>
     );
   }

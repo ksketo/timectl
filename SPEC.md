@@ -34,9 +34,8 @@ List all configured categories.
 ### `timectl insights`
 Interactive AI-powered analysis of your time tracking data. Launches a TUI with:
 
-1. **Period selection** — choose "This Week" or "This Month"
-2. **Date picker** — scroll-based year/month/day selector (↑↓ to change, ←→ to switch segments)
-3. **AI analysis** — streams insights from Claude including time allocation, gap analysis, work patterns, and recommendations
+1. **Period selection** — choose "This Week" or "This Month" via interactive selector
+2. **AI analysis** — streams insights from Claude including time allocation, gap analysis, work patterns, and recommendations
 
 Requires `ANTHROPIC_API_KEY` in your environment or `.env` file. Uses Claude Sonnet 4.6 via the Vercel AI SDK.
 
