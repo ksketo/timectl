@@ -5,6 +5,7 @@ import Spinner from "ink-spinner";
 import { getEntriesRange } from "../lib/storage.ts";
 import { startOfWeek, startOfMonth } from "../lib/format.ts";
 import { prepareInsightsData, streamInsights } from "../lib/insights.ts";
+import { MarkdownText } from "./MarkdownText.tsx";
 
 type Step = "period" | "analyzing" | "done" | "error";
 type Period = "week" | "month";
@@ -105,7 +106,7 @@ export function InsightsView() {
           </Box>
         ) : (
           <Box flexDirection="column">
-            <Text>{output}</Text>
+            <MarkdownText>{output}</MarkdownText>
           </Box>
         )}
         <Text dimColor>Press Q to cancel</Text>
@@ -128,7 +129,7 @@ export function InsightsView() {
   // Done
   return (
     <Box flexDirection="column" gap={1}>
-      <Text>{output}</Text>
+      <MarkdownText>{output}</MarkdownText>
       <Text dimColor>Q/Esc: Quit</Text>
     </Box>
   );
