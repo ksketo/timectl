@@ -4,7 +4,7 @@ import { startCommand } from "./commands/start.tsx";
 import { resumeCommand } from "./commands/resume.tsx";
 import { historyCommand } from "./commands/history.tsx";
 import { exportCommand } from "./commands/export.ts";
-import { insightsCommand } from "./commands/insights.tsx";
+import { insightsCommand } from "./commands/insights.ts";
 import {
   listCategories,
   addCategory,
