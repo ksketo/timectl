@@ -62,7 +62,7 @@ export function prepareInsightsData(
   }
 
   for (const [day, dayEntries] of byDay) {
-    const sorted = dayEntries.sort(
+    const sorted = [...dayEntries].sort(
       (a, b) => new Date(a.startedAt).getTime() - new Date(b.startedAt).getTime()
     );
     for (let i = 1; i < sorted.length; i++) {
