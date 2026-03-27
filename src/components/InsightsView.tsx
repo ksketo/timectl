@@ -34,7 +34,7 @@ export function InsightsView() {
         exit();
       }
     },
-    { isActive: step === "done" || step === "error" }
+    { isActive: step === "analyzing" || step === "done" || step === "error" }
   );
 
   // Run analysis when step becomes "analyzing"
@@ -108,6 +108,7 @@ export function InsightsView() {
             <Text>{output}</Text>
           </Box>
         )}
+        <Text dimColor>Press Q to cancel</Text>
       </Box>
     );
   }
