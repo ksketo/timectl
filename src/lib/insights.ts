@@ -1,7 +1,7 @@
 import { streamText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 import type { TimeEntry } from "../types.ts";
-import { formatDuration, formatDate } from "./format.ts";
+import { formatDate } from "./format.ts";
 
 interface InsightsData {
   period: { from: string; to: string };

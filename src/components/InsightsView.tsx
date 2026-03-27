@@ -62,7 +62,7 @@ export function InsightsView() {
         const data = prepareInsightsData(entries, from, now);
         const result = streamInsights(data);
 
-        for await (const delta of (await result).textStream) {
+        for await (const delta of result.textStream) {
           if (cancelled) break;
           setOutput((prev) => prev + delta);
         }
