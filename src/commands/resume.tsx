@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { render, Box, Text } from "ink";
+import { render, Box, Text, useApp, useInput } from "ink";
 import SelectInput from "ink-select-input";
 import { v4 as uuidv4 } from "uuid";
 import { getRecentEntries, saveEntry } from "../lib/storage.ts";
@@ -17,6 +17,16 @@ function ResumeApp() {
   const [selected, setSelected] = useState<TaskOption | null>(null);
   const [loading, setLoading] = useState(true);
   const [startedAt] = useState(new Date().toISOString());
+  const { exit } = useApp();
+
+  useInput(
+    (input, key) => {
+      if (key.escape || input.toLowerCase() === "q") {
+        exit();
+      }
+    },
+    { isActive: !selected }
+  );
 
   useEffect(() => {
     getRecentEntries(30).then((entries) => {
@@ -51,11 +61,21 @@ function ResumeApp() {
   };
 
   if (loading) {
-    return <Text dimColor>Loading recent tasks...</Text>;
+    return (
+      <Box flexDirection="column">
+        <Text dimColor>Loading recent tasks...</Text>
+        <Text dimColor>Press Q to cancel</Text>
+      </Box>
+    );
   }
 
   if (tasks.length === 0) {
-    return <Text color="yellow">No recent tasks to resume. Use "timectl start" first.</Text>;
+    return (
+      <Box flexDirection="column">
+        <Text color="yellow">No recent tasks to resume. Use "timectl start" first.</Text>
+        <Text dimColor>Press Q to cancel</Text>
+      </Box>
+    );
   }
 
   if (!selected) {
@@ -79,6 +99,7 @@ function ResumeApp() {
             });
           }}
         />
+        <Text dimColor>Press Q to cancel</Text>
       </Box>
     );
   }
