@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { render } from "ink";
 import { v4 as uuidv4 } from "uuid";
-import { loadConfig } from "../lib/config.ts";
+import { loadConfig, saveConfig } from "../lib/config.ts";
 import { saveEntry } from "../lib/storage.ts";
 import { formatDuration } from "../lib/format.ts";
 import { CategoryPicker } from "../components/CategoryPicker.tsx";
@@ -32,11 +32,20 @@ function StartApp({ description, categories }: Props) {
     );
   };
 
+  const handleAddCategory = async (name: string) => {
+    const config = await loadConfig();
+    if (!config.categories.includes(name)) {
+      config.categories.push(name);
+      await saveConfig(config);
+    }
+  };
+
   if (!category) {
     return (
       <CategoryPicker
         categories={categories}
         onSelect={(c) => setCategory(c)}
+        onAddCategory={handleAddCategory}
       />
     );
   }
