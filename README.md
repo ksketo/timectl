@@ -27,8 +27,10 @@ Track how you spend your time from the terminal—by project or theme—without 
 
 Clone the repository, install dependencies, then run the CLI from the project root:
 
+> Clone via SSH (or use `https://github.com/ksketo/timectl.git` if you prefer HTTPS)
+
 ```bash
-git clone <repository-url>
+git clone git@github.com:ksketo/timectl.git
 cd timectl
 bun install
 bun run src/index.ts --help
