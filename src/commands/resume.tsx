@@ -29,7 +29,7 @@ function ResumeApp() {
   );
 
   useEffect(() => {
-    getRecentEntries(30).then((entries) => {
+    getRecentEntries(15).then((entries) => {
       const seen = new Set<string>();
       const unique: TaskOption[] = [];
       // Most recent first
